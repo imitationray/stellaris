@@ -252,15 +252,16 @@ str(student)
 # $ GENDER: chr  "M" "F" "M"
 
 # 특정 컬럼 -> vector
-student <- student$score
-
-mean(score)
-sum(score)
-var(score)
+x <- student$SCORE
+x
+mean(x)
+sum(x)
+var(x)
+student
 
 # 표준편차
-sqrt(var(score))
-sd(score)
+sqrt(var(x))
+sd(x)
 
 # 산포도 : 분산, 표준편차
 
@@ -271,10 +272,10 @@ sd(score)
 # 분산 = sum((x-산술평균)^2)/(n-1)
 # 표준편차 = sqrt(분산)
 
-avg <- mean(score)
-diff <- (score - avg)^2 # (vector -scala)
-sum(diff)/(length(score)-1)
-VAR <- sum(diff) / (length(score) - 1)
+avg <- mean(x)
+diff <- (x - avg)^2 # (vector -scala)
+sum(diff)/(length(x)-1)
+VAR <- sum(diff) / (length(x) - 1)
 VAR
 SD <- sqrt(VAR)
 SD
