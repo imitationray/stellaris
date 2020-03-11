@@ -323,7 +323,8 @@ lst2$second[2:4] # 7  8  9
 # data.frame$칼럼명
 # list$키명
 
-# 3) 다양한 자료형
+# 3) 다양한 자료형 
+
 lst3 <- list(name = c("홍길동", "유관순"),
             age = c(35, 25),
             gender = c('M', 'F'))
@@ -398,3 +399,136 @@ df
 # 4) 특정 칼럼의 특정 값으로 subset 생성
 df5 <- subset(df, z %in% c('a', 'c', 'e')) # %in% 연산자
 df5
+
+# [실습] iris dataset 이용subset 생성
+iris
+str(iris)
+#'data.frame':	150 obs. of  5 variables:
+# $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+# $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+# $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+# $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+# $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+
+iris_df <- subset(iris, Sepal.Length >= mean(Sepal.Length), 
+                  select = c(Sepal.Length, Petal.Length, Species))
+str(iris_df)
+#'data.frame':	70 obs. of  3 variables:
+# $ Sepal.Length: num  7 6.4 6.9 6.5 6.3 6.6 5.9 6 6.1 6.7 ...
+# $ Petal.Length: num  4.7 4.5 4.9 4.6 4.7 4.6 4.2 4 4.7 4.4 ...
+# $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 2 2 2 2 2 2 2 2 2 2 ...
+
+
+# 7. 문자열 처리와 정규표현식 
+install.packages("stringr")
+library(stringr)
+
+string = "hong35lee45kang55유관순25이사도시45"
+string
+# [1] "hong35lee45kang55유관순25"
+
+# 메타문자 : 패턴지정 특수 기호   
+
+# 1. str_extract_all
+
+# 1) 반복관련 메타문자 : [x] : x 1개, {n} : n개 연속   
+str_extract_all(string, "[a-z]{3}") # 영문소자 3개 연속 
+#[[1]] -> key
+#[1] "hon" "lee" "kan" -> value
+str_extract_all(string, "[a-z]{3,}") # 3자 이상 연속 
+#[[1]]
+#[1] "hong" "lee"  "kang"
+
+name <- str_extract_all(string, "[가-힣]{3,}") # 한글 3자 이상 
+# list -> vector 
+unlist(name)
+# [1] "유관순"   "이사도시"
+
+name <- str_extract_all(string, "[가-힣]{3,5}") # 3자~5자 사이 
+name
+
+# 숫자(나이) 추출 : 문자형  
+ages <- str_extract_all(string, "[0-9]{2,}")
+# list -> vector 변경 
+ages_vec <- unlist(ages) # "35" "45" "55" "25" "45"
+# 문자형 -> 숫자형 변환 
+num_ages = as.numeric(ages_vec)
+
+cat('나이 평균=', mean(num_ages)) # 나이 평균= 41
+
+# 2) 단어와 숫자 관련 메타문자 
+# 단어 : \\w
+# 숫자 : \\d
+
+jumin <- "123456-4234567"
+
+str_extract_all(jumin, "[0-9]{6}-[1-4]\\d{6}")
+# "123456-1234567" - 패턴과 일치된 경우 
+# character(0) - 일치되지 않은 경우 
+
+email <- "kp1234@naver.com"
+str_extract_all(email, "[a-z]{3,}@[a-z]{3,}.[a-z]{2,}")
+# character(0)
+
+# \\w : 영,숫,한 -> 특수문자 제외 
+str_extract_all(email, "[a-z]\\w{3,}@[a-z]{3,}.[a-z]{2,}")
+# [1] "kp1234@naver.com"
+
+email2 <- "kp1$234@naver.com"
+str_extract_all(email2, "[a-z]\\w{3,}@[a-z]{3,}.[a-z]{2,}")
+# character(0)
+
+# 3. 접두어(^)/접미어($) 메타문자 
+email3 <- "1kp1234@naver.com"
+str_extract_all(email3, "[a-z]\\w{3,}@[a-z]{3,}.[a-z]{2,}")
+# [1] "kp1234@naver.com"
+
+str_extract_all(email3, "^[a-z]\\w{3,}@[a-z]{3,}.[a-z]{2,}")
+# character(0)
+
+str_extract_all(email3, "^[a-z]\\w{3,}@[a-z]{3,}.com$")
+
+
+# 4) 특정 문자 제외 메타문자 
+string
+# [1] "hong35lee45kang55유관순25이사도시45"
+
+result <- str_extract_all(string, "[^0-9]{3,}") # 숫자 제외, 나머지 반환 
+result # [[1]] : 기본키 
+
+# 불용어 제거 : 숫자, 영문자, 특수문자 
+name <- str_extract_all(result[[1]], "[가-힣]{3,}")
+unlist(name)
+# [1] "유관순"   "이사도시"
+
+
+# 2. str_length : 문자열 길이 반환 
+length(string) # 1
+str_length(string) # 28
+
+# 3. str_locate/ str_locate_all
+str_locate(string, 'g')
+str_locate_all(string, 'g')
+#      start end
+#[1,]     4   4
+#[2,]    15  15
+
+# 4. str_replace/str_replace_all
+str_replace_all(string, "[0-9]{2}", "") # 숫자제거 
+# "hongleekang유관순이사도시"
+
+# 5. str_sub : 부분 문자열 
+str_sub(string, start = 3, end = 5)
+# "ng3"  
+
+# 6. str_split : 문자열 분리(토큰)
+string2 = "홍길동 이순신 강감찬 유관순"
+result <- str_split(string2, " ")
+result
+
+name <- unlist(result)
+name # [1] "홍길동" "이순신" "강감찬" "유관순"
+
+# 7. 문자열 결합(join) : 기본함수 
+paste(name, collapse =" " )
+# [1] "홍길동,이순신,강감찬,유관순"

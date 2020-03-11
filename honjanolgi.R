@@ -124,3 +124,23 @@ HP <- lm(price ~ bedrooms + bathrooms + sqft_living + sqft_lot + floors + grade,
 summary(HP)
 plot(HP)
 ##
+
+n <- 1000000
+es_circle <- function(n){
+  data <- cbind(runif(n, min = -1, max = 1),runif(n, min = -1, max = 1))
+  colnames(data) <- c('x','y')
+  N <- length(which(data[,1]^2 + data[,2]^2 <= 1))
+  PI <- N/n * 4
+  plot(y~x,data=data, ylim = c(-1,1), xlim = c(-1,1),
+       pch = c(20), cex = 0.7, col = 2,
+       main = paste('n=',n,' pi =',PI,sep=''))
+  abline( v = 0, lwd = 2); abline( h = 0, lwd = 2)
+  theta <- seq(-pi,pi,length=1000)
+  x<- cos(theta); y<- sin(theta)
+  polygon(x,y, lwd=3, border = 4)
+}
+# install.packages('animation')
+# library(animation)
+for (i in c(10,100,1000,2000,4000,8000,16000,24000,32000)) {
+  es_circle(i)
+}
