@@ -77,6 +77,8 @@ pie(table(iris$Species),
 summary(VADeaths)
 boxplot(VADeaths)
 
+# 사분위수
+quantile(VADeaths[,1])
 
 # 2) 히스토그램 시각화 : 대칭성 확인
 par(mfrow = c(1,2))
@@ -98,6 +100,11 @@ hist(iris$Sepal.Width,
 lines(density(iris$Sepal.Width),
       col = 'red')
 
+n <- 10000
+x <- rnorm(n, mean = 0, sd =1)
+hist(x, freq = F)
+lines(density(x),
+      col = 'red')
 
 # 3) 산점도 시각화
 x <- runif(n = 15, min = 1, max = 100)
@@ -106,7 +113,7 @@ plot(x)
 y <- runif(n = 15, min = 5, max = 120)
 
 plot(x, y) # (y ~ x)
-plot(y~x)
+plot(y ~ x)
 
 # col 속성
 head(iris, 10)
