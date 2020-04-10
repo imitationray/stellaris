@@ -136,7 +136,7 @@ for(i in 1:n){
 }
 is.na(DF[12,1])
 age2 <- vector(mode = 'integer', 20)
-
+age2 <- 1:20
 for(i in 1:20){
   if(!is.na(DF[i,1])){
     age2[i] <- DF$age[i]
@@ -150,7 +150,7 @@ for(i in 1:20){
     age2[i] <- avg
   }
 }
-DF$age2 <- age2
+DF$age2 <- round(age2)
 
 21+43+45
 109/3
@@ -159,17 +159,6 @@ DF$age2 <- age2
 ifelse(!is.na(DF[(DF$grade)==5,1]),
        x <- DF[!is.na(DF$age)&(DF$grade)==5,1],
        DF[(DF$grade)==5,1])
-
-avg2[i] <- for(r in grade[i]){
-  == r
-  age_avg <- DF[!is.na(DF$age),]$grade
-  x <- 
-    y <-
-
-    avg2[i]
-
-
-  DF[is.na(DF$age),]
 
 
 DF[1:12,1]
